@@ -15,7 +15,8 @@ import org.openqa.selenium.WebElement;
 
 import com.hs.kw.base.Base;
 
-public class keywordengine {
+public class keyworddrivenengine1 {
+	
 	
 	
 	public WebDriver d;
@@ -24,9 +25,8 @@ public class keywordengine {
 	public Sheet sheet; //poi ss user model package
 	public Base base;
 	public WebElement element;
-	String locatorName=null;
-	String locatorValue=null;
-	public final String SCENARIO_SHEET_PATH="D:\\nagneon\\hubspot.com\\src\\main\\java\\com\\qa\\hs\\kw\\scenario\\keyworddriven.xlsx";
+
+	public final String SCENARIO_SHEET_PATH="D:\\nagneon\\keyworddriven\\src\\main\\java\\com\\qa\\hs\\scenario\\keyworddriven.xlsx";
 	public void startexecution(String sheetname){
 		FileInputStream file=null;
 		try {
@@ -47,14 +47,15 @@ public class keywordengine {
 		int k=0; //for column iteration in excel
 		for(int i =0; i<sheet.getLastRowNum(); i++){
 			try{
-			String locatorcolvalue=sheet.getRow(i+1).getCell(k+1).toString().trim(); //means that 2nd row and 2nd column
-			if(!locatorcolvalue.equalsIgnoreCase("NA")){
+			String locatorType=sheet.getRow(i+1).getCell(k+1).toString().trim(); 
+			String locatorValue=sheet.getRow(i+1).getCell(k+2).toString().trim();
+			/*if(!locatorcolvalue.equalsIgnoreCase("NA")){
 				locatorName=locatorcolvalue.split("=")[0].trim(); //id
 				locatorValue=locatorcolvalue.split("=")[1].trim(); // username
 				
-			}
-			String actioncol=sheet.getRow(i+1).getCell(k+2).toString().trim();
-			String valuecol=sheet.getRow(i+1).getCell(k+3).toString().trim();
+			}*/
+			String actioncol=sheet.getRow(i+1).getCell(k+3).toString().trim();
+			String valuecol=sheet.getRow(i+1).getCell(k+4).toString().trim();
 			switch (actioncol) {
 			case "open browser":
 				base = new Base();
@@ -85,7 +86,7 @@ public class keywordengine {
 				break;
 			}
 			
-			switch (locatorName) {
+			switch (locatorType) {
 			case "id":
 				 element=d.findElement(By.id(locatorValue));
 				if(actioncol.equalsIgnoreCase("sendkeys")){
@@ -95,12 +96,14 @@ public class keywordengine {
 				}else if(actioncol.equalsIgnoreCase("click")){
 					element.click();
 				}
-				break;
 				
 			case "linkText":	
 				element=d.findElement(By.linkText(locatorValue));
                 element.click();
-
+				break;
+			
+			
+				
 			default:
 				break;
 			}
@@ -111,6 +114,6 @@ public class keywordengine {
 	  }
 	}
 
-	
+
 
 }
